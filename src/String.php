@@ -2,7 +2,7 @@
 
 namespace Idiorm;
 
-require './StringException.php';
+require __DIR__ . '/StringException.php';
 
 /**
  * A class to handle str_replace operations that involve quoted strings

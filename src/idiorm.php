@@ -43,9 +43,9 @@
 
 namespace Idiorm;
 
-require './String.php';
-require './ResultSet.php';
-require './MissingMethodException.php';
+require __DIR__ . '/String.php';
+require __DIR__ . '/ResultSet.php';
+require __DIR__ . '/MissingMethodException.php';
 
 class ORM implements \ArrayAccess
 {

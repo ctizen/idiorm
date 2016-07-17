@@ -123,7 +123,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'connection_string' => 'sqlite::memory:',
             'id_column' => 'primary_key',
             'id_column_overrides' => array(),
-            'error_mode' => PDO::ERRMODE_EXCEPTION,
+            'error_mode' => \PDO::ERRMODE_EXCEPTION,
             'username' => null,
             'password' => null,
             'driver_options' => null,

@@ -30,13 +30,13 @@ class ORMTest extends \PHPUnit_Framework_TestCase
     public function testForTable()
     {
         $result = ORM::forTable('test');
-        $this->assertInstanceOf('ORM', $result);
+        $this->assertInstanceOf('Idiorm\ORM', $result);
     }
 
     public function testCreate()
     {
         $model = ORM::forTable('test')->create();
-        $this->assertInstanceOf('ORM', $model);
+        $this->assertInstanceOf('Idiorm\ORM', $model);
         $this->assertTrue($model->isNew());
     }
 
@@ -72,7 +72,7 @@ class ORMTest extends \PHPUnit_Framework_TestCase
     public function testFindResultSet()
     {
         $result_set = ORM::forTable('test')->findResultSet();
-        $this->assertInstanceOf('IdiormResultSet', $result_set);
+        $this->assertInstanceOf('Idiorm\IdiormResultSet', $result_set);
         $this->assertSame(count($result_set), 5);
     }
 
@@ -81,7 +81,7 @@ class ORMTest extends \PHPUnit_Framework_TestCase
         ORM::configure('return_result_sets', true);
 
         $result_set = ORM::forTable('test')->findMany();
-        $this->assertInstanceOf('IdiormResultSet', $result_set);
+        $this->assertInstanceOf('Idiorm\IdiormResultSet', $result_set);
         $this->assertSame(count($result_set), 5);
         
         ORM::configure('return_result_sets', false);
@@ -99,7 +99,7 @@ class ORMTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException IdiormMethodMissingException
+     * @expectedException Idiorm\IdiormMethodMissingException
      */
     public function testInvalidORMFunctionCallShouldCreateException()
     {
@@ -108,7 +108,7 @@ class ORMTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException IdiormMethodMissingException
+     * @expectedException Idiorm\IdiormMethodMissingException
      */
     public function testInvalidResultsSetFunctionCallShouldCreateException()
     {
