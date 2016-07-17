@@ -8,5 +8,5 @@ install: composer install
 script:
   - php vendor/bin/phpcs --config-set default_standard PSR2
   - php vendor/bin/phpcs --config-set show_warnings 0
-  - php vendor/bin/phpcs test src
+  - php vendor/bin/phpcs test src --ignore=test/bootstrap.php
   - php vendor/bin/phpunit --colors --coverage-text

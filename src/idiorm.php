@@ -1191,7 +1191,7 @@ class ORM implements \ArrayAccess
      */
     protected function _addCondition($type, $fragment, $values = array())
     {
-        $conditions_class_property_name = "_{$type}_conditions";
+        $conditions_class_property_name = "_{$type}Conditions";
         if (!is_array($values)) {
             $values = array($values);
         }
@@ -1771,7 +1771,7 @@ class ORM implements \ArrayAccess
      */
     protected function _buildConditions($type)
     {
-        $conditions_class_property_name = "_{$type}_conditions";
+        $conditions_class_property_name = "_{$type}Conditions";
         // If there are no clauses, return empty string
         if (count($this->$conditions_class_property_name) === 0) {
             return '';
@@ -2346,7 +2346,7 @@ class ORM implements \ArrayAccess
     {
         $method = preg_replace_callback('/([a-z])_([a-z])/', function ($matches) {
                 return $matches[1] . strtoupper($matches[2]);
-            }, $name);
+        }, $name);
 
         if (method_exists($this, $method)) {
             return call_user_func_array(array($this, $method), $arguments);
@@ -2363,15 +2363,23 @@ class ORM implements \ArrayAccess
      * This allows us to call ORM methods using camel case and remain
      * backwards compatible.
      *
+     * @throws IdiormMethodMissingException
      * @param  string   $name
      * @param  array    $arguments
      * @return ORM
      */
     public static function __callStatic($name, $arguments)
     {
-        $method = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $name));
+        $method = preg_replace_callback('/([a-z])_([A-Z])/', function ($matches) {
+                return $matches[1] . strtoupper($matches[2]);
+        }, $name);
+        $class = 'Idiorm\ORM';
 
-        return call_user_func_array(array('ORM', $method), $arguments);
+        if (method_exists($class, $method)) {
+            return $class::$method($arguments);
+        } else {
+            throw new IdiormMethodMissingException("Method $name() does not exist in class $class");
+        }
     }
 }
 

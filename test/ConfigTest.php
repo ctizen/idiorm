@@ -1,108 +1,124 @@
 <?php
 
-class ConfigTest extends PHPUnit_Framework_TestCase {
+namespace Idiorm;
 
-    public function setUp() {
+class ConfigTest extends \PHPUnit_Framework_TestCase
+{
+
+    public function setUp()
+    {
         // Enable logging
         ORM::configure('logging', true);
 
         // Set up the dummy database connection
-        $db = new MockPDO('sqlite::memory:');
-        ORM::set_db($db);
+        $db = new \MockPDO('sqlite::memory:');
+        ORM::setDb($db);
 
         ORM::configure('id_column', 'primary_key');
     }
 
-    public function tearDown() {
-        ORM::reset_config();
-        ORM::reset_db();
+    public function tearDown()
+    {
+        ORM::resetConfig();
+        ORM::resetDb();
     }
 
-    protected function setUpIdColumnOverrides() {
+    protected function setUpIdColumnOverrides()
+    {
         ORM::configure('id_column_overrides', array(
             'widget' => 'widget_id',
             'widget_handle' => 'widget_handle_id',
         ));
     }
 
-    protected function tearDownIdColumnOverrides() {
+    protected function tearDownIdColumnOverrides()
+    {
         ORM::configure('id_column_overrides', array());
     }
 
-    public function testSettingIdColumn() {
-        ORM::for_table('widget')->find_one(5);
+    public function testSettingIdColumn()
+    {
+        ORM::forTable('widget')->findOne(5);
         $expected = "SELECT * FROM `widget` WHERE `primary_key` = '5' LIMIT 1";
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
     }
 
-    public function testSettingIdColumnOverridesOne() {
+    public function testSettingIdColumnOverridesOne()
+    {
         $this->setUpIdColumnOverrides();
 
-        ORM::for_table('widget')->find_one(5);
+        ORM::forTable('widget')->findOne(5);
         $expected = "SELECT * FROM `widget` WHERE `widget_id` = '5' LIMIT 1";
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
 
         $this->tearDownIdColumnOverrides();
     }
 
-    public function testSettingIdColumnOverridesTwo() {
+    public function testSettingIdColumnOverridesTwo()
+    {
         $this->setUpIdColumnOverrides();
 
-        ORM::for_table('widget_handle')->find_one(5);
+        ORM::forTable('widget_handle')->findOne(5);
         $expected = "SELECT * FROM `widget_handle` WHERE `widget_handle_id` = '5' LIMIT 1";
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
 
         $this->tearDownIdColumnOverrides();
     }
 
-    public function testSettingIdColumnOverridesThree() {
+    public function testSettingIdColumnOverridesThree()
+    {
         $this->setUpIdColumnOverrides();
 
-        ORM::for_table('widget_nozzle')->find_one(5);
+        ORM::forTable('widget_nozzle')->findOne(5);
         $expected = "SELECT * FROM `widget_nozzle` WHERE `primary_key` = '5' LIMIT 1";
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
 
         $this->tearDownIdColumnOverrides();
     }
 
-    public function testInstanceIdColumnOne() {
+    public function testInstanceIdColumnOne()
+    {
         $this->setUpIdColumnOverrides();
 
-        ORM::for_table('widget')->use_id_column('new_id')->find_one(5);
+        ORM::forTable('widget')->useIdColumn('new_id')->findOne(5);
         $expected = "SELECT * FROM `widget` WHERE `new_id` = '5' LIMIT 1";
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
 
         $this->tearDownIdColumnOverrides();
     }
 
-    public function testInstanceIdColumnTwo() {
+    public function testInstanceIdColumnTwo()
+    {
         $this->setUpIdColumnOverrides();
 
-        ORM::for_table('widget_handle')->use_id_column('new_id')->find_one(5);
+        ORM::forTable('widget_handle')->useIdColumn('new_id')->findOne(5);
         $expected = "SELECT * FROM `widget_handle` WHERE `new_id` = '5' LIMIT 1";
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
 
         $this->tearDownIdColumnOverrides();
     }
 
-    public function testInstanceIdColumnThree() {
+    public function testInstanceIdColumnThree()
+    {
         $this->setUpIdColumnOverrides();
 
-        ORM::for_table('widget_nozzle')->use_id_column('new_id')->find_one(5);
+        ORM::forTable('widget_nozzle')->useIdColumn('new_id')->findOne(5);
         $expected = "SELECT * FROM `widget_nozzle` WHERE `new_id` = '5' LIMIT 1";
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
 
         $this->tearDownIdColumnOverrides();
     }
 
-    public function testGetConfig() {
-        $this->assertTrue(ORM::get_config('logging'));
+    public function testGetConfig()
+    {
+        $this->assertTrue(ORM::getConfig('logging'));
         ORM::configure('logging', false);
-        $this->assertFalse(ORM::get_config('logging'));
+        $this->assertFalse(ORM::getConfig('logging'));
         ORM::configure('logging', true);
     }
 
-    public function testGetConfigArray() {
+    public function testGetConfigArray()
+    {
         $expected = array(
             'connection_string' => 'sqlite::memory:',
             'id_column' => 'primary_key',
@@ -119,7 +135,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
             'return_result_sets' => false,
             'limit_clause_style' => 'limit',
         );
-        $this->assertEquals($expected, ORM::get_config());
+        $this->assertEquals($expected, ORM::getConfig());
     }
-
 }
