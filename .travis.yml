@@ -4,4 +4,9 @@ php:
   - 5.6
   - 7.0
   - hhvm
-script: "phpunit --colors --coverage-text"
+install: composer install
+script:
+  - php vendor/bin/phpcs --config-set default_standard PSR2
+  - php vendor/bin/phpcs --config-set show_warnings 0
+  - php vendor/bin/phpcs test src
+  - php vendor/bin/phpunit --colors --coverage-text
