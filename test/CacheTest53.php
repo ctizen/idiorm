@@ -1,13 +1,17 @@
 <?php
 
-class CacheTest53 extends PHPUnit_Framework_TestCase {
+namespace Idiorm;
+
+class CacheTest53 extends \PHPUnit_Framework_TestCase
+{
 
     const ALTERNATE = 'alternate'; // Used as name of alternate connection
 
-    public function setUp() {
+    public function setUp()
+    {
         // Set up the dummy database connections
-        ORM::set_db(new MockPDO('sqlite::memory:'));
-        ORM::set_db(new MockDifferentPDO('sqlite::memory:'), self::ALTERNATE);
+        ORM::setDb(new \MockPDO('sqlite::memory:'));
+        ORM::setDb(new \MockDifferentPDO('sqlite::memory:'), self::ALTERNATE);
 
         // Enable logging
         ORM::configure('logging', true);
@@ -16,13 +20,15 @@ class CacheTest53 extends PHPUnit_Framework_TestCase {
         ORM::configure('caching', true, self::ALTERNATE);
     }
 
-    public function tearDown() {
-        ORM::reset_config();
-        ORM::reset_db();
+    public function tearDown()
+    {
+        ORM::resetConfig();
+        ORM::resetDb();
     }
 
      
-    public function testCustomCacheCallback() {
+    public function testCustomCacheCallback()
+    {
         $phpunit = $this;
         $my_cache = array();
         ORM::configure('caching_auto_clear', true);
@@ -47,36 +53,36 @@ class CacheTest53 extends PHPUnit_Framework_TestCase {
             $phpunit->assertEquals(true, is_string($connection_name));
             $phpunit->assertEquals('widget', $table_name);
 
-            if(isset($my_cache) and isset($my_cache[$cache_key])){
-               $phpunit->assertEquals(true, is_array($my_cache[$cache_key]));
-               return $my_cache[$cache_key];
+            if (isset($my_cache) and isset($my_cache[$cache_key])) {
+                $phpunit->assertEquals(true, is_array($my_cache[$cache_key]));
+                return $my_cache[$cache_key];
             } else {
-               return false;
+                return false;
             }
         });
         ORM::configure('clear_cache', function ($table_name, $connection_name) use ($phpunit, &$my_cache) {
-             $phpunit->assertEquals(true, is_string($table_name)); 
+             $phpunit->assertEquals(true, is_string($table_name));
              $phpunit->assertEquals(true, is_string($connection_name));
              $my_cache = array();
         });
-        ORM::for_table('widget')->where('name', 'Fred')->where('age', 21)->find_one();
-        ORM::for_table('widget')->where('name', 'Fred')->where('age', 21)->find_one();
-        ORM::for_table('widget')->where('name', 'Bob')->where('age', 42)->find_one();
+        ORM::forTable('widget')->where('name', 'Fred')->where('age', 21)->findOne();
+        ORM::forTable('widget')->where('name', 'Fred')->where('age', 21)->findOne();
+        ORM::forTable('widget')->where('name', 'Bob')->where('age', 42)->findOne();
  
-        //our custom cache should be full now 
+        //our custom cache should be full now
         $this->assertEquals(true, !empty($my_cache));
  
-        //checking custom cache key 
-        foreach($my_cache as $k=>$v){
-        $this->assertEquals('some-prefix', substr($k,0,11));
+        //checking custom cache key
+        foreach ($my_cache as $k => $v) {
+            $this->assertEquals('some-prefix', substr($k, 0, 11));
         }
         
-        $new = ORM::for_table('widget')->create();
+        $new = ORM::forTable('widget')->create();
         $new->name = "Joe";
         $new->age = 25;
         $saved = $new->save();
         
-        //our custom cache should be empty now 
+        //our custom cache should be empty now
         $this->assertEquals(true, empty($my_cache));
     }
 }

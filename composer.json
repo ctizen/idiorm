@@ -1,12 +1,12 @@
 {
-    "name": "j4mie/idiorm",
+    "name": "heilage-nsk/idiorm",
     "type": "library",
     "description": "A lightweight nearly-zero-configuration object-relational mapper and fluent query builder for PHP5",
     "keywords": ["idiorm", "orm", "query builder"],
     "homepage": "http://j4mie.github.com/idiormandparis",
     "support": {
-        "issues": "https://github.com/j4mie/idiorm/issues",
-        "source": "https://github.com/j4mie/idiorm"
+        "issues": "https://github.com/heilage-nsk/idiorm/issues",
+        "source": "https://github.com/heilage-nsk/idiorm"
     },
     "authors": [
         {
@@ -26,6 +26,12 @@
             "email": "me@durhamhale.com",
             "homepage": "http://durhamhale.com",
             "role": "Maintainer"
+        },
+        {
+            "name": "Oleg Klimenko",
+            "email": "heilage.nsk@gmail.com",
+            "homepage": "http://github.com/heilage-nsk",
+            "role": "Maintainer"
         }
     ],
     "license": [
@@ -36,7 +42,8 @@
     "require": {
         "php": ">=5.2.0"
     },
-    "autoload": {
-        "classmap": ["idiorm.php"]
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "squizlabs/php_codesniffer": "2.*"
     }
 }

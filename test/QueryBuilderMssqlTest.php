@@ -1,32 +1,37 @@
 <?php
 
-class QueryBuilderMssqlTest extends PHPUnit_Framework_TestCase {
+namespace Idiorm;
 
-    public function setUp() {
+class QueryBuilderMssqlTest extends \PHPUnit_Framework_TestCase
+{
+
+    public function setUp()
+    {
         // Enable logging
         ORM::configure('logging', true);
 
         // Set up the dummy database connection
-        $db = new MockMsSqlPDO('sqlite::memory:');
-        ORM::set_db($db);
+        $db = new \MockMsSqlPDO('sqlite::memory:');
+        ORM::setDb($db);
     }
 
-    public function tearDown() {
-        ORM::reset_config();
-        ORM::reset_db();
+    public function tearDown()
+    {
+        ORM::resetConfig();
+        ORM::resetDb();
     }
 
-    public function testFindOne() {
-        ORM::for_table('widget')->find_one();
+    public function testFindOne()
+    {
+        ORM::forTable('widget')->findOne();
         $expected = 'SELECT TOP 1 * FROM "widget"';
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
     }
 
-    public function testLimit() {
-        ORM::for_table('widget')->limit(5)->find_many();
+    public function testLimit()
+    {
+        ORM::forTable('widget')->limit(5)->findMany();
         $expected = 'SELECT TOP 5 * FROM "widget"';
-        $this->assertEquals($expected, ORM::get_last_query());
+        $this->assertEquals($expected, ORM::getLastQuery());
     }
-    
 }
-

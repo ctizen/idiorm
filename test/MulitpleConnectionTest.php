@@ -1,52 +1,59 @@
 <?php
 
-class MultipleConnectionTest extends PHPUnit_Framework_TestCase {
+namespace Idiorm;
+
+class MultipleConnectionTest extends \PHPUnit_Framework_TestCase
+{
 
     const ALTERNATE = 'alternate'; // Used as name of alternate connection
 
-    public function setUp() {
+    public function setUp()
+    {
         // Set up the dummy database connections
-        ORM::set_db(new MockPDO('sqlite::memory:'));
-        ORM::set_db(new MockDifferentPDO('sqlite::memory:'), self::ALTERNATE);
+        ORM::setDb(new \MockPDO('sqlite::memory:'));
+        ORM::setDb(new \MockDifferentPDO('sqlite::memory:'), self::ALTERNATE);
 
         // Enable logging
         ORM::configure('logging', true);
         ORM::configure('logging', true, self::ALTERNATE);
     }
 
-    public function tearDown() {
-        ORM::reset_config();
-        ORM::reset_db();
+    public function tearDown()
+    {
+        ORM::resetConfig();
+        ORM::resetDb();
     }
 
-    public function testMultiplePdoConnections() {
-        $this->assertInstanceOf('MockPDO', ORM::get_db());
-        $this->assertInstanceOf('MockPDO', ORM::get_db(ORM::DEFAULT_CONNECTION));
-        $this->assertInstanceOf('MockDifferentPDO', ORM::get_db(self::ALTERNATE));
+    public function testMultiplePdoConnections()
+    {
+        $this->assertInstanceOf('MockPDO', ORM::getDb());
+        $this->assertInstanceOf('MockPDO', ORM::getDb(ORM::DEFAULT_CONNECTION));
+        $this->assertInstanceOf('MockDifferentPDO', ORM::getDb(self::ALTERNATE));
     }
 
-    public function testRawExecuteOverAlternateConnection() {
+    public function testRawExecuteOverAlternateConnection()
+    {
         $expected = "SELECT * FROM `foo`";
-        ORM::raw_execute("SELECT * FROM `foo`", array(), self::ALTERNATE);
+        ORM::rawExecute("SELECT * FROM `foo`", array(), self::ALTERNATE);
 
-        $this->assertEquals($expected, ORM::get_last_query(self::ALTERNATE));
+        $this->assertEquals($expected, ORM::getLastQuery(self::ALTERNATE));
     }
 
-    public function testFindOneOverDifferentConnections() {
-        ORM::for_table('widget')->find_one();
-        $statementOne = ORM::get_last_statement();
+    public function testFindOneOverDifferentConnections()
+    {
+        ORM::forTable('widget')->findOne();
+        $statementOne = ORM::getLastStatement();
         $this->assertInstanceOf('MockPDOStatement', $statementOne);
 
-        ORM::for_table('person', self::ALTERNATE)->find_one();
-        $statementOne = ORM::get_last_statement(); // get_statement is *not* per connection
+        ORM::forTable('person', self::ALTERNATE)->findOne();
+        $statementOne = ORM::getLastStatement(); // get_statement is *not* per connection
         $this->assertInstanceOf('MockDifferentPDOStatement', $statementOne);
 
         $expected = "SELECT * FROM `widget` LIMIT 1";
-        $this->assertNotEquals($expected, ORM::get_last_query()); // Because get_last_query() is across *all* connections
-        $this->assertEquals($expected, ORM::get_last_query(ORM::DEFAULT_CONNECTION));
+        $this->assertNotEquals($expected, ORM::getLastQuery()); // Because getLastQuery() is across *all* connections
+        $this->assertEquals($expected, ORM::getLastQuery(ORM::DEFAULT_CONNECTION));
 
         $expectedToo = "SELECT * FROM `person` LIMIT 1";
-        $this->assertEquals($expectedToo, ORM::get_last_query(self::ALTERNATE));
+        $this->assertEquals($expectedToo, ORM::getLastQuery(self::ALTERNATE));
     }
-
 }

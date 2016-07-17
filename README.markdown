@@ -1,22 +1,17 @@
 Idiorm
 ======
 
-[![Build Status](https://travis-ci.org/j4mie/idiorm.png?branch=master)](https://travis-ci.org/j4mie/idiorm) [![Latest Stable Version](https://poser.pugx.org/j4mie/idiorm/v/stable.png)](https://packagist.org/packages/j4mie/idiorm) [![Total Downloads](https://poser.pugx.org/j4mie/idiorm/downloads.png)](https://packagist.org/packages/j4mie/idiorm) [![Code Climate](https://codeclimate.com/github/j4mie/idiorm/badges/gpa.svg)](https://codeclimate.com/github/j4mie/idiorm)
+[![Build Status](https://travis-ci.org/heilage-nsk/idiorm.png?branch=master)](https://travis-ci.org/heilage-nsk/idiorm)
 
 [http://j4mie.github.com/idiormandparis/](http://j4mie.github.com/idiormandparis/)
 
----
-### Feature complete
-
-Idiorm is now considered to be feature complete as of version 1.5.0. Whilst it will continue to be maintained with bug fixes there will be no further new features added from this point on.
-
-**Please do not submit feature requests or pull requests adding new features as they will be closed without ceremony.**
+This is a *PSR2-compliant fork* of idiorm. Fixes and improvements are welcome.
 
 ---
 
 A lightweight nearly-zero-configuration object-relational mapper and fluent query builder for PHP5.
 
-Tested on PHP 5.2.0+ - may work on earlier versions with PDO and the correct database drivers.
+Tested on PHP 5.5.0+ - may work on earlier versions with PDO and the correct database drivers.
 
 Released under a [BSD license](http://en.wikipedia.org/wiki/BSD_licenses).
 
